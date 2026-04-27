@@ -18,7 +18,17 @@
       "Bash(/d/Software/nodejs/npx.cmd skills:*)",
       "Bash(python:*)",
       "mcp__plugin_context7_context7__resolve-library-id",
-      "mcp__plugin_everything-claude-code_context7__resolve-library-id"
+      "mcp__plugin_everything-claude-code_context7__resolve-library-id",
+      "Read(//c/Users/hongr/**)",
+      "Bash(npm --version)",
+      "Bash(bash:*)",
+      "Bash(/d/Software/nodejs/node.exe:*)",
+      "Bash(cp -r /c/Users/hongr/agent-reach-temp ~/.claude/skills/agent-reach)",
+      "Bash(rm -rf /c/Users/hongr/agent-reach-temp)",
+      "Bash(cp -r /c/Users/hongr/last30days-temp ~/.claude/skills/last30days)",
+      "Bash(rm -rf /c/Users/hongr/last30days-temp)",
+      "Bash(cp -r /c/Users/hongr/corner-temp/skills/write-xiaohongshu ~/.claude/skills/)",
+      "Bash(rm -rf /c/Users/hongr/corner-temp)"
     ]
   }
 }
