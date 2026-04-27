@@ -15,14 +15,16 @@
 ### 方式一：npx 一键安装（推荐）
 
 ```bash
-npx skills add git@github.com:shubaomi/custom-slash-commands.git -g -a claude-code -y
+npx skills add https://github.com/shubaomi/custom-slash-commands.git -g -a claude-code -y
 ```
+
+> 如果在 Windows 环境下遇到问题，可以手动克隆安装（方式二）。
 
 ### 方式二：Git 克隆安装
 
 ```bash
 # 克隆仓库
-git clone git@github.com:shubaomi/custom-slash-commands.git
+git clone https://github.com/shubaomi/custom-slash-commands.git
 
 # 复制到 Claude Code 的 skills 目录
 cp -r custom-slash-commands ~/.claude/skills/custom-slash-commands
@@ -32,7 +34,7 @@ cp -r custom-slash-commands ~/.claude/skills/custom-slash-commands
 
 ### 方式三：下载 .skill 文件安装
 
-1. 从 GitHub Release 或 Actions 页下载 `.skill` 文件
+1. 从 [GitHub Releases](https://github.com/shubaomi/custom-slash-commands/releases) 下载 `.skill` 文件
 2. 将 `custom-slash-commands.skill` 文件复制到 `~/.claude/skills/` 目录
 3. 重启 Claude Code
 
