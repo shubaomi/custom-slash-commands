@@ -1,113 +1,156 @@
 ---
 name: custom-slash-commands
-description: Custom slash command framework for Claude Code. Use when users want to create, manage, or execute their own slash commands like /dev-cmd-code-review, /stock-cmd-query, or any custom command with prefix grouping. Manages a configuration file that defines command name, prefix, description, and optional workflow steps. This skill reads the config file and executes the appropriate command workflow based on the user's slash command invocation.
+description: Custom slash commands framework. Use /custom-slash-commands to activate, or directly use commands like /dev-cmd-code-review, /stock-cmd-query after installation.
 ---
 
 # Custom Slash Commands Framework
 
-A flexible framework that lets you define and execute custom slash commands for Claude Code. Define your own commands with simple JSON configuration.
+This skill provides a comprehensive set of slash commands for development, stock trading, design, operations, data analysis, project management, security, and API work.
 
-## How It Works
+## Initial Setup (Auto-Activate on First Use)
 
-1. **You invoke a custom slash command** (e.g., `/dev-cmd-code-review`)
-2. **Skill loads your config** from `config.json`
-3. **Skill finds the matching command** by command name or alias
-4. **Skill executes the workflow** described in the command definition
-5. **Results are returned** based on the command type
+When this skill is first invoked, it will automatically:
 
-## Command Execution
+1. **Check command files**: Verify that slash command files exist in `~/.claude/commands/`
+2. **Auto-generate if missing**: If commands are not found, run the generation script to create them
+3. **Show ready status**: Display available commands and usage information
 
-When a custom slash command is invoked:
+## Commands Overview
 
-### Step 1: Load Configuration
-Read `config.json` from the skill directory to get all command definitions.
+### Development Commands (dev-cmd)
+- `/dev-cmd-code-review` - 执行代码审查，检查代码质量、安全漏洞、最佳实践和错误处理
+- `/dev-cmd-commit` - 提交代码到远程仓库，自动生成规范的提交信息并推送
+- `/dev-cmd-update-docs` - 更新项目的需求、设计、进度和记忆文档
+- `/dev-cmd-test` - 运行项目测试并生成测试报告
+- `/dev-cmd-build` - 构建项目，生成可部署的产物
+- `/dev-cmd-lint` - 检查代码风格问题并自动修复
+- `/dev-cmd-debug` - 启动调试会话，帮助定位和解决问题
+- `/dev-cmd-git-status` - 查看 Git 仓库状态，包括变更、分支和提交历史
+- `/dev-cmd-git-pull` - 拉取远程最新代码并合并到当前分支
+- `/dev-cmd-standup` - 生成站会报告，记录今日完成、明日计划和 blockers
+- `/dev-cmd-meeting-notes` - 整理会议纪要，包括讨论要点、决策和行动项
+- `/dev-cmd-log-time` - 记录工时到时间跟踪系统
+- `/dev-cmd-gen-tests` - 根据代码变更自动生成测试用例
 
-### Step 2: Match Command
-Find the command entry where `command` matches the invoked slash command name (without the `/` prefix).
+### Stock Trading Commands (stock-cmd)
+- `/stock-cmd-query` - 查询股票实时行情数据
+- `/stock-cmd-buy` - 分析股票并推荐买入价格和策略
+- `/stock-cmd-sell` - 分析股票并推荐卖出价格和策略
+- `/stock-cmd-analyze` - 对股票进行技术分析（MA、RSI、MACD、布林带、成交量）
+- `/stock-cmd-predict` - 基于历史数据和技术指标进行价格预测分析
+- `/stock-cmd-recommend` - 根据筛选条件推荐合适的股票
+- `/stock-cmd-alerts` - 设置股票价格提醒
+- `/stock-cmd-portfolio` - 分析投资组合，计算盈亏和风险指标
+- `/stock-cmd-history` - 查询股票历史数据
 
-### Step 3: Execute
-For the matched command:
-- If `workflow` array has steps, execute them in order
-- If `workflow` is empty, use the `description` as instructions for an LLM-native approach
-- Return execution results or status
+### Design Commands (design-cmd)
+- `/design-cmd-mockup` - 根据描述生成UI设计稿或页面布局建议
+- `/design-cmd-color-palette` - 根据主题或现有配色生成配色方案
+- `/design-cmd-font-pair` - 推荐适合项目的字体搭配方案
+- `/design-cmd-icon-suggest` - 根据功能需求推荐合适的图标方案
+- `/design-cmd-design-review` - 审查现有设计稿，提出改进建议
 
-## Configuration File Format
+### Operations Commands (ops-cmd)
+- `/ops-cmd-deploy` - 部署应用到指定环境
+- `/ops-cmd-rollback` - 回滚应用到上一个稳定版本
+- `/ops-cmd-logs` - 查看应用日志，支持过滤和搜索
+- `/ops-cmd-health-check` - 检查应用和服务健康状态
+- `/ops-cmd-backup` - 备份数据库或文件
+- `/ops-cmd-restore` - 从备份恢复数据库或文件
+- `/ops-cmd-migrate` - 执行数据库迁移
+- `/ops-cmd-scale` - 扩缩容应用实例
 
-`config.json` should contain:
+### Data Commands (data-cmd)
+- `/data-cmd-query` - 查询数据，支持条件过滤和排序
+- `/data-cmd-export` - 导出数据到指定格式（CSV、Excel、JSON）
+- `/data-cmd-import` - 导入数据到数据库
+- `/data-cmd-stats` - 生成数据统计分析报告
 
+### Project Management Commands (pm-cmd)
+- `/pm-cmd-tasks` - 管理项目任务，增删改查
+- `/pm-cmd-sprint` - 管理冲刺，创建冲刺、分配任务、查看进度
+- `/pm-cmd-report` - 生成项目进度报告
+- `/pm-cmd-risk` - 识别和管理项目风险
+
+### Security Commands (sec-cmd)
+- `/sec-cmd-scan` - 执行安全扫描，检查漏洞
+- `/sec-cmd-audit` - 安全审计，检查权限和访问记录
+- `/sec-cmd-secrets` - 检查代码中是否泄露密钥或凭证
+
+### API Commands (api-cmd)
+- `/api-cmd-test` - 测试 API 接口
+- `/api-cmd-docs` - 根据代码生成或更新 API 文档
+- `/api-cmd-mock` - 根据 API 描述生成 Mock 数据
+
+## Activation Process
+
+When invoked, this skill performs the following:
+
+### Step 1: Check Command Status
+Execute: `ls ~/.claude/commands/dev-cmd-*.md 2>/dev/null | wc -l`
+If the count is 0 or files are missing, proceed to Step 2.
+
+### Step 2: Generate Commands (If Needed)
+If commands are not found, execute:
+```
+python ~/.claude/skills/custom-slash-commands/scripts/generate_commands.py
+```
+Or on Windows:
+```
+python %USERPROFILE%/.claude/skills/custom-slash-commands/scripts/generate_commands.py
+```
+
+### Step 3: Display Welcome
+Show a formatted welcome message with:
+- Number of commands available
+- Command categories with counts
+- Quick start examples
+
+## Command Configuration
+
+Commands are defined in `config.json` at:
+`~/.claude/skills/custom-slash-commands/config.json`
+
+### Adding New Commands
+To add a new command:
+1. Edit `config.json` and add a new entry in the `commands` array
+2. The next time this skill is invoked, commands will be automatically regenerated
+
+### Command Format
 ```json
 {
-  "commands": [
-    {
-      "command": "code-review",
-      "prefix": "dev-cmd",
-      "description": "执行代码审查，检查质量、安全、最佳实践",
-      "workflow": [
-        "执行git diff查看当前变更",
-        "进行全面代码审查，检查安全漏洞",
-        "检查代码质量、一致性、错误处理",
-        "输出审查报告"
-      ]
-    },
-    {
-      "command": "commit",
-      "prefix": "dev-cmd",
-      "description": "提交代码到远程仓库，自动生成提交信息",
-      "workflow": []
-    }
-  ]
+  "command": "command-name",
+  "prefix": "prefix-name",
+  "description": "What this command does",
+  "workflow": ["Step 1", "Step 2", "Step 3"]
 }
 ```
 
-### Configuration Fields
+## Troubleshooting
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `command` | Yes | Command name (e.g., "code-review") |
-| `prefix` | No | Prefix for grouping (e.g., "dev-cmd") |
-| `description` | Yes | What this command does (used when workflow is empty) |
-| `workflow` | No | Array of workflow steps to execute in order |
+### Commands not appearing
+If slash commands like `/dev-cmd-code-review` don't appear:
+1. Restart Claude Code
+2. Invoke this skill: `/custom-slash-commands`
+3. Check that commands are generated in `~/.claude/commands/`
 
-## Design Principles
+### Regenerate Commands
+To force regeneration of all command files:
+1. Delete files in `~/.claude/commands/` matching `*-cmd-*.md`
+2. Invoke this skill or run the generation script manually
 
-1. **Simplicity**: Configuration over code. Most commands need only a description.
-2. **Flexibility**: Workflow steps are optional — the LLM can handle complex tasks from descriptions alone.
-3. **Organization**: Commands are grouped by prefix for easy management.
-4. **Portability**: Fork the project, modify config.json, share with others.
+## Quick Start
 
-## Example Commands
+```bash
+# See all available commands
+/custom-slash-commands
 
-### Development Commands
-- `/dev-cmd-code-review` — 执行代码审查
-- `/dev-cmd-commit` — 提交代码到远程仓库
-- `/dev-cmd-update-docs` — 更新项目文档
+# Direct usage examples
+/dev-cmd-code-review     # Start code review
+/dev-cmd-commit          # Commit changes
+/stock-cmd-query AAPL    # Query stock price
+/ops-cmd-health-check    # Check system health
+```
 
-### Stock Commands
-- `/stock-cmd-query` — 查询股票数据
-- `/stock-cmd-buy` — 买入股票
-- `/stock-cmd-sell` — 卖出股票
-
-### Custom Commands
-- `/my-cmd-backup` — 备份项目文件
-- `/my-cmd-deploy` — 部署应用到服务器
-
-## Workflow Execution
-
-When executing a workflow:
-1. **Parse steps** from the workflow array
-2. **Execute each step** using appropriate tools
-3. **Collect results** from each step
-4. **Return summary** of what was accomplished
-
-Steps can be:
-- Shell commands (bash commands)
-- File operations (read, write, edit)
-- API calls (if needed)
-- Or any task the LLM can perform from text description
-
-## Notes
-
-- Commands are invoked by their full name (prefix + command)
-- If no workflow is defined, the skill uses the description to guide execution
-- Config file supports Chinese and English descriptions
-- Workflow steps can reference each other or be independent
+---
+*Total: 49 commands across 8 categories*
