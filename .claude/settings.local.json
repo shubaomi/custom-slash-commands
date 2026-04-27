@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python scripts/package_skill.py .)",
+      "mcp__plugin_mempalace_mempalace__mempalace_diary_write"
+    ]
+  }
+}

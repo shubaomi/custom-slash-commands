@@ -1,0 +1,568 @@
+{
+  "commands": [
+    {
+      "command": "code-review",
+      "prefix": "dev-cmd",
+      "description": "执行代码审查，检查代码质量、安全漏洞、最佳实践和错误处理",
+      "workflow": [
+        "执行 git diff 查看当前变更",
+        "进行全面代码审查：安全漏洞、代码质量、一致性、错误处理",
+        "检查是否遵循项目的编码规范",
+        "输出详细的代码审查报告"
+      ]
+    },
+    {
+      "command": "commit",
+      "prefix": "dev-cmd",
+      "description": "提交代码到远程仓库，自动生成规范的提交信息并推送",
+      "workflow": [
+        "执行 git status 查看当前状态",
+        "执行 git diff 查看变更内容",
+        "根据变更内容生成符合规范的提交信息（使用 feat、fix、refactor、docs 等类型）",
+        "执行 git add 和 git commit",
+        "执行 git push 推送到远程仓库"
+      ]
+    },
+    {
+      "command": "update-docs",
+      "prefix": "dev-cmd",
+      "description": "更新项目的各类文档，包括需求文档、设计文档、进度文档和记忆文档",
+      "workflow": [
+        "扫描项目目录，识别需要更新的文档类型",
+        "根据当前项目状态更新记忆文档（memory/*.md）",
+        "更新进度文档（如果有）",
+        "更新需求文档和设计文档（如果有变更）",
+        "输出文档更新报告"
+      ]
+    },
+    {
+      "command": "test",
+      "prefix": "dev-cmd",
+      "description": "运行项目测试并生成测试报告",
+      "workflow": [
+        "检测项目类型和测试框架（Jest、Vitest、Pytest 等）",
+        "执行测试命令",
+        "收集测试结果和覆盖率数据",
+        "输出测试报告，包括通过/失败的测试用例"
+      ]
+    },
+    {
+      "command": "build",
+      "prefix": "dev-cmd",
+      "description": "构建项目，生成可部署的产物",
+      "workflow": [
+        "检测项目类型和构建工具",
+        "执行构建命令",
+        "检查构建产物",
+        "输出构建结果和产物位置"
+      ]
+    },
+    {
+      "command": "lint",
+      "prefix": "dev-cmd",
+      "description": "检查代码风格问题并自动修复",
+      "workflow": [
+        "检测并运行 ESLint、Prettier 或其他代码风格检查工具",
+        "识别代码风格问题",
+        "自动修复可修复的问题",
+        "输出修复报告和未修复的问题列表"
+      ]
+    },
+    {
+      "command": "debug",
+      "prefix": "dev-cmd",
+      "description": "启动调试会话，帮助定位和解决问题",
+      "workflow": [
+        "分析当前代码上下文",
+        "识别可能的调试断点",
+        "提供调试建议和步骤",
+        "输出问题分析和解决方案"
+      ]
+    },
+    {
+      "command": "git-status",
+      "prefix": "dev-cmd",
+      "description": "查看 Git 仓库状态，包括变更、分支和提交历史",
+      "workflow": [
+        "执行 git status 查看当前状态",
+        "执行 git branch -a 查看所有分支",
+        "执行 git log --oneline -5 查看最近提交",
+        "输出仓库状态摘要"
+      ]
+    },
+    {
+      "command": "git-pull",
+      "prefix": "dev-cmd",
+      "description": "拉取远程最新代码并合并到当前分支",
+      "workflow": [
+        "执行 git fetch 获取远程更新",
+        "执行 git status 查看当前状态",
+        "执行 git pull 拉取并合并",
+        "处理可能的合并冲突",
+        "输出拉取结果"
+      ]
+    },
+    {
+      "command": "standup",
+      "prefix": "dev-cmd",
+      "description": "生成站会报告，记录今日完成、明日计划和 blockers",
+      "workflow": [
+        "检查 git log 获取今日提交记录",
+        "检查项目任务列表获取进行中的任务",
+        "生成站会报告格式",
+        "输出报告供用户确认和补充"
+      ]
+    },
+    {
+      "command": "meeting-notes",
+      "prefix": "dev-cmd",
+      "description": "整理会议纪要，包括讨论要点、决策和行动项",
+      "workflow": [
+        "如果用户提供了会议内容，记录关键讨论点",
+        "提取决策事项",
+        "识别行动项和负责人",
+        "输出格式化的会议纪要"
+      ]
+    },
+    {
+      "command": "log-time",
+      "prefix": "dev-cmd",
+      "description": "记录工时到时间跟踪系统",
+      "workflow": [
+        "查询用户今日的 git 提交记录",
+        "根据提交内容估算各任务花费时间",
+        "生成工时记录条目",
+        "输出工时报告"
+      ]
+    },
+    {
+      "command": "gen-tests",
+      "prefix": "dev-cmd",
+      "description": "根据代码变更自动生成测试用例",
+      "workflow": [
+        "执行 git diff 查看变更的代码",
+        "分析新增或修改的函数逻辑",
+        "生成对应的测试用例",
+        "将测试用例写入项目测试文件",
+        "输出生成的测试用例列表"
+      ]
+    },
+    {
+      "command": "query",
+      "prefix": "stock-cmd",
+      "description": "查询股票实时行情数据",
+      "workflow": [
+        "获取用户指定的股票代码",
+        "查询当前价格、涨跌幅、成交量、市值等数据",
+        "查询52周高低点和相关指标",
+        "输出完整的行情数据报告"
+      ]
+    },
+    {
+      "command": "buy",
+      "prefix": "stock-cmd",
+      "description": "分析股票并推荐买入价格和策略",
+      "workflow": [
+        "获取股票基本信息",
+        "进行技术分析（MA、RSI、MACD、布林带）",
+        "结合基本面数据计算合理买入区间",
+        "输出买入建议：建议价格、止损位、仓位建议"
+      ]
+    },
+    {
+      "command": "sell",
+      "prefix": "stock-cmd",
+      "description": "分析股票并推荐卖出价格和策略",
+      "workflow": [
+        "获取股票持仓信息和当前价格",
+        "计算持仓盈亏情况",
+        "进行技术分析判断卖出时机",
+        "输出卖出建议：建议价格、止盈位、风险提示"
+      ]
+    },
+    {
+      "command": "analyze",
+      "prefix": "stock-cmd",
+      "description": "对股票进行技术分析（MA、RSI、MACD、布林带、成交量）",
+      "workflow": [
+        "获取股票历史K线数据",
+        "计算均线系统（MA5、MA10、MA20、MA60）",
+        "计算RSI指标判断超买超卖",
+        "计算MACD指标判断趋势",
+        "分析布林带位置",
+        "综合成交量分析",
+        "输出技术分析报告和操作建议"
+      ]
+    },
+    {
+      "command": "predict",
+      "prefix": "stock-cmd",
+      "description": "基于历史数据和技术指标进行价格预测分析",
+      "workflow": [
+        "获取股票历史数据（至少100个交易日）",
+        "分析价格趋势和波动率",
+        "使用简单移动平均进行短期预测",
+        "分析支撑位和压力位",
+        "输出价格预测：短期（1-5天）、中期（1周-1月）目标价位"
+      ]
+    },
+    {
+      "command": "recommend",
+      "prefix": "stock-cmd",
+      "description": "根据筛选条件推荐合适的股票",
+      "workflow": [
+        "收集用户输入的筛选条件（行业、市值、估值、业绩等）",
+        "扫描符合条件的股票池",
+        "对候选股票进行技术分析和基本面分析",
+        "按照评分排序",
+        "输出推荐股票列表及理由"
+      ]
+    },
+    {
+      "command": "alerts",
+      "prefix": "stock-cmd",
+      "description": "设置股票价格提醒",
+      "workflow": [
+        "获取用户指定的股票和目标价格",
+        "检查目标价格的合理性",
+        "记录提醒到配置文件",
+        "输出已设置的提醒列表"
+      ]
+    },
+    {
+      "command": "portfolio",
+      "prefix": "stock-cmd",
+      "description": "分析投资组合，计算盈亏和风险指标",
+      "workflow": [
+        "获取用户持仓股票列表和数量",
+        "查询各股票当前价格",
+        "计算总市值和盈亏金额",
+        "计算盈亏比例和持仓占比",
+        "分析组合风险（分散度、行业分布）",
+        "输出组合分析报告和优化建议"
+      ]
+    },
+    {
+      "command": "history",
+      "prefix": "stock-cmd",
+      "description": "查询股票历史数据",
+      "workflow": [
+        "获取用户指定的股票和时间范围",
+        "查询历史行情数据",
+        "计算期间涨跌幅、最高价、最低价",
+        "输出历史数据表格和简要统计"
+      ]
+    },
+    {
+      "command": "mockup",
+      "prefix": "design-cmd",
+      "description": "根据描述生成UI设计稿或页面布局建议",
+      "workflow": [
+        "理解用户描述的页面需求",
+        "生成页面结构建议（HTML/CSS组件结构）",
+        "提供布局建议和视觉层次",
+        "输出设计建议文档"
+      ]
+    },
+    {
+      "command": "color-palette",
+      "prefix": "design-cmd",
+      "description": "根据主题或现有配色生成配色方案",
+      "workflow": [
+        "了解项目主题和已有品牌色",
+        "生成主色、辅助色、背景色、文字色方案",
+        "提供色值（HEX、RGB、HSL）",
+        "输出配色方案和使用建议"
+      ]
+    },
+    {
+      "command": "font-pair",
+      "prefix": "design-cmd",
+      "description": "推荐适合项目的字体搭配方案",
+      "workflow": [
+        "了解项目类型和风格",
+        "推荐标题字体和正文字体搭配",
+        "提供字体大小层级建议",
+        "输出字体方案和示例"
+      ]
+    },
+    {
+      "command": "icon-suggest",
+      "prefix": "design-cmd",
+      "description": "根据功能需求推荐合适的图标方案",
+      "workflow": [
+        "了解需要的图标类型和数量",
+        "推荐图标库（Lucide、Heroicons、Feather 等）",
+        "提供图标使用规范",
+        "输出图标选用建议"
+      ]
+    },
+    {
+      "command": "design-review",
+      "prefix": "design-cmd",
+      "description": "审查现有设计稿，提出改进建议",
+      "workflow": [
+        "如果用户提供了设计稿图片或描述，分析设计",
+        "检查布局、配色、字体、间距等要素",
+        "评估一致性和可访问性",
+        "输出设计审查报告和改进建议"
+      ]
+    },
+    {
+      "command": "deploy",
+      "prefix": "ops-cmd",
+      "description": "部署应用到指定环境",
+      "workflow": [
+        "确认部署环境（开发/测试/生产）",
+        "执行构建命令生成产物",
+        "执行部署脚本或命令",
+        "检查部署状态",
+        "输出部署结果和访问地址"
+      ]
+    },
+    {
+      "command": "rollback",
+      "prefix": "ops-cmd",
+      "description": "回滚应用到上一个稳定版本",
+      "workflow": [
+        "查看部署历史和当前版本",
+        "确认回滚目标版本",
+        "执行回滚命令",
+        "检查回滚后的服务状态",
+        "输出回滚结果"
+      ]
+    },
+    {
+      "command": "logs",
+      "prefix": "ops-cmd",
+      "description": "查看应用日志，支持过滤和搜索",
+      "workflow": [
+        "获取日志位置和最近的日志内容",
+        "根据关键词过滤日志",
+        "查找错误和异常信息",
+        "输出日志摘要和分析"
+      ]
+    },
+    {
+      "command": "health-check",
+      "prefix": "ops-cmd",
+      "description": "检查应用和服务健康状态",
+      "workflow": [
+        "检查服务进程状态",
+        "检查关键端口可达性",
+        "检查数据库连接状态",
+        "检查外部依赖服务状态",
+        "输出健康检查报告"
+      ]
+    },
+    {
+      "command": "backup",
+      "prefix": "ops-cmd",
+      "description": "备份数据库或文件",
+      "workflow": [
+        "确认需要备份的内容",
+        "执行备份命令",
+        "验证备份文件完整性",
+        "记录备份位置和时间",
+        "输出备份报告"
+      ]
+    },
+    {
+      "command": "restore",
+      "prefix": "ops-cmd",
+      "description": "从备份恢复数据库或文件",
+      "workflow": [
+        "列出可用的备份",
+        "确认恢复目标备份",
+        "执行恢复操作",
+        "验证数据完整性",
+        "输出恢复报告"
+      ]
+    },
+    {
+      "command": "migrate",
+      "prefix": "ops-cmd",
+      "description": "执行数据库迁移",
+      "workflow": [
+        "检查当前数据库版本",
+        "检查待执行的迁移脚本",
+        "执行数据库迁移",
+        "验证迁移结果",
+        "输出迁移报告"
+      ]
+    },
+    {
+      "command": "scale",
+      "prefix": "ops-cmd",
+      "description": "扩缩容应用实例",
+      "workflow": [
+        "检查当前实例数量和资源使用",
+        "确认扩缩容目标",
+        "执行扩缩容命令",
+        "检查新实例状态",
+        "输出扩缩容结果"
+      ]
+    },
+    {
+      "command": "query",
+      "prefix": "data-cmd",
+      "description": "查询数据，支持条件过滤和排序",
+      "workflow": [
+        "了解数据源和查询需求",
+        "构建查询语句",
+        "执行查询",
+        "格式化输出结果",
+        "输出查询结果和统计"
+      ]
+    },
+    {
+      "command": "export",
+      "prefix": "data-cmd",
+      "description": "导出数据到指定格式（CSV、Excel、JSON）",
+      "workflow": [
+        "确认数据源和导出范围",
+        "确定导出格式",
+        "执行导出操作",
+        "验证导出文件",
+        "输出导出文件路径"
+      ]
+    },
+    {
+      "command": "import",
+      "prefix": "data-cmd",
+      "description": "导入数据到数据库",
+      "workflow": [
+        "确认导入目标表和数据格式",
+        "验证数据格式和内容",
+        "执行导入操作",
+        "检查导入结果",
+        "输出导入报告"
+      ]
+    },
+    {
+      "command": "stats",
+      "prefix": "data-cmd",
+      "description": "生成数据统计分析报告",
+      "workflow": [
+        "确定统计维度和指标",
+        "执行统计分析查询",
+        "计算关键指标（均值、中位数、占比等）",
+        "生成可视化建议",
+        "输出统计分析报告"
+      ]
+    },
+    {
+      "command": "tasks",
+      "prefix": "pm-cmd",
+      "description": "管理项目任务，增删改查",
+      "workflow": [
+        "查看当前任务列表",
+        "根据需求创建、更新或删除任务",
+        "更新任务状态",
+        "输出任务列表变更报告"
+      ]
+    },
+    {
+      "command": "sprint",
+      "prefix": "pm-cmd",
+      "description": "管理冲刺，创建冲刺、分配任务、查看进度",
+      "workflow": [
+        "查看当前冲刺状态",
+        "列出冲刺中的任务",
+        "计算冲刺进度和完成率",
+        "输出冲刺进度报告"
+      ]
+    },
+    {
+      "command": "report",
+      "prefix": "pm-cmd",
+      "description": "生成项目进度报告",
+      "workflow": [
+        "收集项目各项指标",
+        "统计任务完成情况",
+        "分析进度偏差",
+        "生成报告文档",
+        "输出项目进度报告"
+      ]
+    },
+    {
+      "command": "risk",
+      "prefix": "pm-cmd",
+      "description": "识别和管理项目风险",
+      "workflow": [
+        "扫描项目当前状态",
+        "识别潜在风险点",
+        "评估风险等级",
+        "提出风险应对建议",
+        "输出风险报告"
+      ]
+    },
+    {
+      "command": "scan",
+      "prefix": "sec-cmd",
+      "description": "执行安全扫描，检查漏洞",
+      "workflow": [
+        "执行代码安全扫描（如 Bandit、OWASP）",
+        "检查依赖包漏洞",
+        "检查配置安全问题",
+        "输出安全扫描报告"
+      ]
+    },
+    {
+      "command": "audit",
+      "prefix": "sec-cmd",
+      "description": "安全审计，检查权限和访问记录",
+      "workflow": [
+        "检查用户权限配置",
+        "审计访问日志",
+        "检查敏感数据访问",
+        "输出安全审计报告"
+      ]
+    },
+    {
+      "command": "secrets",
+      "prefix": "sec-cmd",
+      "description": "检查代码中是否泄露密钥或凭证",
+      "workflow": [
+        "扫描代码中的硬编码密钥",
+        "检查 .env 文件是否正确配置",
+        "检查日志中的敏感信息",
+        "输出密钥泄露风险报告"
+      ]
+    },
+    {
+      "command": "test",
+      "prefix": "api-cmd",
+      "description": "测试 API 接口",
+      "workflow": [
+        "如果用户提供了 API 描述，执行测试",
+        "构建测试请求（参数、Header、Body）",
+        "发送请求并记录响应",
+        "验证响应是否符合预期",
+        "输出 API 测试报告"
+      ]
+    },
+    {
+      "command": "docs",
+      "prefix": "api-cmd",
+      "description": "根据代码生成或更新 API 文档",
+      "workflow": [
+        "扫描 API 路由文件",
+        "提取 API 端点信息",
+        "生成或更新 API 文档",
+        "输出文档更新报告"
+      ]
+    },
+    {
+      "command": "mock",
+      "prefix": "api-cmd",
+      "description": "根据 API 描述生成 Mock 数据",
+      "workflow": [
+        "如果用户提供了 API 结构，生成 Mock 数据",
+        "生成符合数据结构的示例数据",
+        "提供 Mock 服务器配置",
+        "输出 Mock 数据和使用说明"
+      ]
+    }
+  ]
+}
