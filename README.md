@@ -12,30 +12,37 @@
 
 ## 安装指南
 
-### 方式一：直接安装 .skill 文件
+### 方式一：npx 一键安装（推荐）
 
-1. 下载 `.skill` 文件
-2. 在 Claude Code 中导入：
-   ```
-   /skill install <path-to-custom-slash-commands.skill>
-   ```
+```bash
+npx skills add git@github.com:shubaomi/custom-slash-commands.git -g -a claude-code -y
+```
 
-### 方式二：Git 克隆
+### 方式二：Git 克隆安装
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/custom-slash-commands.git
+git clone git@github.com:shubaomi/custom-slash-commands.git
 
-# 进入目录
-cd custom-slash-commands
-```
-
-### 方式三：复制到本地 skills 目录
-
-```bash
 # 复制到 Claude Code 的 skills 目录
 cp -r custom-slash-commands ~/.claude/skills/custom-slash-commands
+
+# 重启 Claude Code 即可使用
 ```
+
+### 方式三：下载 .skill 文件安装
+
+1. 从 GitHub Release 或 Actions 页下载 `.skill` 文件
+2. 将 `custom-slash-commands.skill` 文件复制到 `~/.claude/skills/` 目录
+3. 重启 Claude Code
+
+### 方式四：直接 Fork 自定义
+
+如果你想自定义命令：
+1. Fork 仓库到你的 GitHub
+2. 克隆你的 Fork
+3. 复制到 `~/.claude/skills/` 目录
+4. 根据需要修改 `config.json`
 
 ## 快速开始
 

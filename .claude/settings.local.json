@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(python scripts/package_skill.py .)",
-      "mcp__plugin_mempalace_mempalace__mempalace_diary_write"
+      "mcp__plugin_mempalace_mempalace__mempalace_diary_write",
+      "Bash(npx skills:*)",
+      "Bash(npm list:*)",
+      "Bash(cmd /c \"npx skills add --help\")",
+      "mcp__MiniMax__web_search",
+      "Bash(npm search:*)",
+      "Bash(npm info:*)",
+      "Bash(cd /tmp)",
+      "Bash(npm pack:*)",
+      "Bash(tar -xzf skills-*.tgz)"
     ]
   }
 }
