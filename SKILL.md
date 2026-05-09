@@ -86,35 +86,32 @@ When this skill is first invoked, it will automatically:
 
 When invoked, this skill performs the following:
 
-### Step 1: Check Command Status
-Execute: `ls ~/.claude/commands/dev-cmd-*.md 2>/dev/null | wc -l`
-If the count is 0 or files are missing, proceed to Step 2.
-
-### Step 2: Generate Commands (If Needed)
-If commands are not found, execute:
+### Step 1: Sync Commands (Smart Update)
+Execute the sync script to check and update all commands:
 ```
 python ~/.claude/skills/custom-slash-commands/scripts/generate_commands.py
 ```
-Or on Windows:
-```
-python %USERPROFILE%/.claude/skills/custom-slash-commands/scripts/generate_commands.py
-```
 
-### Step 3: Display Welcome
-Show a formatted welcome message with:
-- Number of commands available
-- Command categories with counts
-- Quick start examples
+The sync logic:
+- **Missing command** → Create the command file
+- **Outdated content** → Update the command file with new content
+- **Up to date** → Skip (no unnecessary file writes)
+
+This ensures `~/.claude/commands/` always reflects the latest `config.json` definitions.
 
 ## Command Configuration
 
 Commands are defined in `config.json` at:
 `~/.claude/skills/custom-slash-commands/config.json`
 
-### Adding New Commands
-To add a new command:
-1. Edit `config.json` and add a new entry in the `commands` array
-2. The next time this skill is invoked, commands will be automatically regenerated
+### Adding or Modifying Commands
+To add a new command or modify an existing one:
+1. Edit `config.json` and add or modify entries in the `commands` array
+2. The next time this skill is invoked, commands will be automatically synced:
+   - New commands → created in `~/.claude/commands/`
+   - Modified commands → updated in `~/.claude/commands/`
+
+### Command Format
 
 ### Command Format
 ```json

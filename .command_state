@@ -1,5 +1,154 @@
 {
   "config_hash": "694a3f3dee626168f0046ba4213b51cf",
-  "generated_at": "2026-04-27T15:04:37.486893",
-  "command_count": 49
+  "generated_at": "2026-05-09T22:37:57.905360",
+  "command_count": 49,
+  "commands": {
+    "dev-cmd-update-docs": {
+      "status": "updated"
+    },
+    "dev-cmd-code-review": {
+      "status": "skipped"
+    },
+    "dev-cmd-commit": {
+      "status": "skipped"
+    },
+    "dev-cmd-test": {
+      "status": "skipped"
+    },
+    "dev-cmd-build": {
+      "status": "skipped"
+    },
+    "dev-cmd-lint": {
+      "status": "skipped"
+    },
+    "dev-cmd-debug": {
+      "status": "skipped"
+    },
+    "dev-cmd-git-status": {
+      "status": "skipped"
+    },
+    "dev-cmd-git-pull": {
+      "status": "skipped"
+    },
+    "dev-cmd-standup": {
+      "status": "skipped"
+    },
+    "dev-cmd-meeting-notes": {
+      "status": "skipped"
+    },
+    "dev-cmd-log-time": {
+      "status": "skipped"
+    },
+    "dev-cmd-gen-tests": {
+      "status": "skipped"
+    },
+    "stock-cmd-query": {
+      "status": "skipped"
+    },
+    "stock-cmd-buy": {
+      "status": "skipped"
+    },
+    "stock-cmd-sell": {
+      "status": "skipped"
+    },
+    "stock-cmd-analyze": {
+      "status": "skipped"
+    },
+    "stock-cmd-predict": {
+      "status": "skipped"
+    },
+    "stock-cmd-recommend": {
+      "status": "skipped"
+    },
+    "stock-cmd-alerts": {
+      "status": "skipped"
+    },
+    "stock-cmd-portfolio": {
+      "status": "skipped"
+    },
+    "stock-cmd-history": {
+      "status": "skipped"
+    },
+    "design-cmd-mockup": {
+      "status": "skipped"
+    },
+    "design-cmd-color-palette": {
+      "status": "skipped"
+    },
+    "design-cmd-font-pair": {
+      "status": "skipped"
+    },
+    "design-cmd-icon-suggest": {
+      "status": "skipped"
+    },
+    "design-cmd-design-review": {
+      "status": "skipped"
+    },
+    "ops-cmd-deploy": {
+      "status": "skipped"
+    },
+    "ops-cmd-rollback": {
+      "status": "skipped"
+    },
+    "ops-cmd-logs": {
+      "status": "skipped"
+    },
+    "ops-cmd-health-check": {
+      "status": "skipped"
+    },
+    "ops-cmd-backup": {
+      "status": "skipped"
+    },
+    "ops-cmd-restore": {
+      "status": "skipped"
+    },
+    "ops-cmd-migrate": {
+      "status": "skipped"
+    },
+    "ops-cmd-scale": {
+      "status": "skipped"
+    },
+    "data-cmd-query": {
+      "status": "skipped"
+    },
+    "data-cmd-export": {
+      "status": "skipped"
+    },
+    "data-cmd-import": {
+      "status": "skipped"
+    },
+    "data-cmd-stats": {
+      "status": "skipped"
+    },
+    "pm-cmd-tasks": {
+      "status": "skipped"
+    },
+    "pm-cmd-sprint": {
+      "status": "skipped"
+    },
+    "pm-cmd-report": {
+      "status": "skipped"
+    },
+    "pm-cmd-risk": {
+      "status": "skipped"
+    },
+    "sec-cmd-scan": {
+      "status": "skipped"
+    },
+    "sec-cmd-audit": {
+      "status": "skipped"
+    },
+    "sec-cmd-secrets": {
+      "status": "skipped"
+    },
+    "api-cmd-test": {
+      "status": "skipped"
+    },
+    "api-cmd-docs": {
+      "status": "skipped"
+    },
+    "api-cmd-mock": {
+      "status": "skipped"
+    }
+  }
 }

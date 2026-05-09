@@ -4,9 +4,9 @@
 
 ## 功能特点
 
+- **智能同步**：自动检查 `config.json` 中每个命令是否存在于 `~/.claude/commands/`，缺失则创建，内容变化则更新
+- **增量更新**：只更新需要变更的命令，未变化的命令不会重复写入
 - **安装即用**：安装后自动激活，无需手动运行脚本
-- **自更新**：修改 config.json 后自动重新生成命令
-- **对话管理**：通过对话方式添加、更新、删除命令
 - **49+ 预设命令**：涵盖开发、股票、设计、运维、数据、项目管理、安全、API 等领域
 
 ## 安装指南
@@ -46,10 +46,11 @@ cp -r custom-slash-commands ~/.claude/skills/custom-slash-commands
 /custom-slash-commands
 ```
 
-这将自动：
-1. 检查命令文件是否存在
-2. 如缺失，自动生成 49 个命令文件
-3. 展示命令菜单和使用说明
+这将自动同步命令：
+- 检查 `~/.claude/commands/` 中的每个内置命令
+- 命令缺失 → 创建
+- 命令存在但内容过时 → 更新
+- 命令内容一致 → 跳过（避免不必要的写入）
 
 ### 2. 直接使用命令
 
@@ -216,17 +217,21 @@ custom-slash-commands/
 2. 输入 `/custom-slash-commands` 触发自动激活
 3. 检查 `~/.claude/commands/` 目录下是否有 `*-cmd-*.md` 文件
 
-### Q: 如何强制重新生成所有命令？
+### Q: 如何强制同步所有命令？
 
 ```
 /custom-slash-commands
-# 强制重新生成所有命令文件
+# 强制同步所有命令文件
 ```
 
 或手动运行：
 ```bash
 python ~/.claude/skills/custom-slash-commands/scripts/generate_commands.py --force
 ```
+
+### Q: 修改 config.json 后需要手动同步吗？
+
+不需要。每次调用 `/custom-slash-commands` 时会自动检查并同步，无需额外操作。
 
 ### Q: 如何分享我的命令配置？
 

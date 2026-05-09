@@ -4,9 +4,9 @@ Generate Claude Code command files from custom-slash-commands config.json
 This creates actual slash command files in ~/.claude/commands/
 
 Usage:
-    python generate_commands.py          # Generate all commands
-    python generate_commands.py --check # Check if regeneration is needed
-    python generate_commands.py --force # Force regeneration even if up-to-date
+    python generate_commands.py          # Sync commands (create/update only if needed)
+    python generate_commands.py --check # Check if any sync is needed
+    python generate_commands.py --force # Force sync all commands
 """
 
 import argparse
@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import sys
+import tempfile
 from pathlib import Path
 from datetime import datetime
 
@@ -41,111 +42,160 @@ def load_state():
                 return json.load(f)
         except (json.JSONDecodeError, IOError):
             pass
-    return {"config_hash": None, "generated_at": None}
+    return {"config_hash": None, "generated_at": None, "commands": {}}
 
-def save_state(config_hash):
-    """Save generation state"""
+def save_state(config_hash, commands_state):
+    """Save generation state with per-command hashes"""
     state = {
         "config_hash": config_hash,
         "generated_at": datetime.now().isoformat(),
-        "command_count": 49  # Will be updated during generation
+        "command_count": len(commands_state),
+        "commands": commands_state
     }
     with open(STATE_FILE, 'w', encoding='utf-8') as f:
         json.dump(state, f, ensure_ascii=False, indent=2)
 
-def check_commands_exist(prefix_filter=None):
-    """Check how many command files exist"""
-    if not COMMANDS_DIR.exists():
-        return 0
+def get_command_file_path(cmd_name):
+    """Return Path object for command file"""
+    return COMMANDS_DIR / f"{cmd_name}.md"
 
-    pattern = "*-cmd-*.md" if prefix_filter is None else f"{prefix_filter}-cmd-*.md"
-    files = list(COMMANDS_DIR.glob(pattern))
-    return len(files)
-
-def needs_regeneration():
-    """Check if command files need to be regenerated"""
-    state = load_state()
-    current_hash = get_config_hash()
-
-    # Check if config changed
-    if state.get("config_hash") != current_hash:
-        return True, "Config changed"
-
-    # Check if command files exist
-    count = check_commands_exist()
-    if count < 49:  # Total expected commands
-        return True, f"Only {count} commands found, expected 49"
-
-    return False, "Up to date"
-
-def generate_command_file(command, prefix, description, workflow):
-    """Generate a command markdown file content."""
-    # Command name is prefix-command or just command if no prefix
+def compute_command_content(command, prefix, description, workflow):
+    """Generate expected file content."""
     if prefix:
         cmd_name = f"{prefix}-{command}"
     else:
         cmd_name = command
 
-    # Build the command content
     content = f"""---
 description: {description}
 ---
 
 """
-    # Add workflow steps if available
     if workflow and len(workflow) > 0:
         content += "执行以下步骤：\n\n"
         for i, step in enumerate(workflow, 1):
             content += f"{i}. {step}\n"
     else:
-        # Use description as the main instruction
         content += f"{description}\n"
 
-    return content
+    return cmd_name, content
 
-def generate_all_commands():
-    """Generate all command files from config"""
+def get_file_content_hash(file_path):
+    """Get MD5 hash of existing file content, None if doesn't exist"""
+    if not file_path.exists():
+        return None
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return hashlib.md5(f.read().encode()).hexdigest()
+    except (IOError, UnicodeDecodeError):
+        return None
+
+def sync_commands(dry_run=False, force=False):
+    """
+    Sync commands with smart update logic.
+
+    Returns: {
+        "created": [cmd_names],
+        "updated": [cmd_names],
+        "skipped": [cmd_names],
+        "errors": [(cmd_name, error)]
+    }
+    """
     config = load_config()
     commands = config.get("commands", [])
 
     # Ensure commands directory exists
     COMMANDS_DIR.mkdir(parents=True, exist_ok=True)
 
-    generated = []
+    result = {
+        "created": [],
+        "updated": [],
+        "skipped": [],
+        "errors": []
+    }
+    commands_state = {}
+
     for cmd in commands:
         command = cmd.get("command", "")
         prefix = cmd.get("prefix", "")
         description = cmd.get("description", "")
         workflow = cmd.get("workflow", [])
 
-        if prefix:
-            cmd_name = f"{prefix}-{command}"
-        else:
-            cmd_name = command
+        cmd_name, expected_content = compute_command_content(command, prefix, description, workflow)
+        file_path = get_command_file_path(cmd_name)
+        expected_hash = hashlib.md5(expected_content.encode()).hexdigest()
 
-        # Generate content
-        content = generate_command_file(command, prefix, description, workflow)
+        try:
+            existing_hash = get_file_content_hash(file_path)
 
-        # Write command file
-        cmd_file = COMMANDS_DIR / f"{cmd_name}.md"
-        with open(cmd_file, 'w', encoding='utf-8') as f:
-            f.write(content)
+            if existing_hash is None:
+                # File doesn't exist - create it
+                if not dry_run:
+                    write_file_atomically(file_path, expected_content)
+                result["created"].append(cmd_name)
+            elif existing_hash != expected_hash:
+                # File exists but content differs - update it
+                if not dry_run:
+                    write_file_atomically(file_path, expected_content)
+                result["updated"].append(cmd_name)
+            else:
+                # Content same - skip
+                result["skipped"].append(cmd_name)
+        except Exception as e:
+            result["errors"].append((cmd_name, str(e)))
 
-        generated.append(f"/{cmd_name}")
+        commands_state[cmd_name] = {
+            "hash": expected_hash,
+            "prefix": prefix,
+            "command": command
+        }
 
-    return generated
+    return result
+
+def write_file_atomically(file_path, content):
+    """Write content to temp file then rename (atomic operation)"""
+    dir_name = file_path.parent
+    with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=dir_name, delete=False) as tmp:
+        tmp.write(content)
+        tmp_name = tmp.name
+    # Atomic rename - won't leave partial file on crash
+    os.replace(tmp_name, file_path)
+
+def needs_sync():
+    """Check if any command needs sync (create or update)"""
+    config = load_config()
+    commands = config.get("commands", [])
+
+    for cmd in commands:
+        command = cmd.get("command", "")
+        prefix = cmd.get("prefix", "")
+        description = cmd.get("description", "")
+        workflow = cmd.get("workflow", [])
+
+        cmd_name, expected_content = compute_command_content(command, prefix, description, workflow)
+        file_path = get_command_file_path(cmd_name)
+        expected_hash = hashlib.md5(expected_content.encode()).hexdigest()
+
+        existing_hash = get_file_content_hash(file_path)
+
+        if existing_hash is None:
+            return True, f"Command '{cmd_name}' is missing"
+        if existing_hash != expected_hash:
+            return True, f"Command '{cmd_name}' has outdated content"
+
+    return False, "All commands are up to date"
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate Claude Code command files")
-    parser.add_argument("--check", action="store_true", help="Check if regeneration is needed")
-    parser.add_argument("--force", action="store_true", help="Force regeneration")
+    parser = argparse.ArgumentParser(description="Sync Claude Code command files")
+    parser.add_argument("--check", action="store_true", help="Check if sync is needed")
+    parser.add_argument("--force", action="store_true", help="Force sync all commands")
     args = parser.parse_args()
 
     # Check mode
     if args.check:
-        needs_regen, reason = needs_regeneration()
+        needs_regen, reason = needs_sync()
         if needs_regen:
-            print(f"NEEDS_REGENERATION: {reason}")
+            print(f"NEEDS_SYNC: {reason}")
             sys.exit(0)
         else:
             print(f"UP_TO_DATE: {reason}")
@@ -153,32 +203,56 @@ def main():
 
     # Force mode or normal mode
     if args.force:
-        print("FORCE: Regenerating all command files...")
+        print("FORCE: Syncing all command files...")
     else:
-        needs_regen, reason = needs_regeneration()
+        needs_regen, reason = needs_sync()
         if not needs_regen:
             state = load_state()
             print(f"Commands are up to date (generated at {state.get('generated_at', 'unknown')})")
-            print("Use --force to regenerate anyway")
+            print("Use --force to sync anyway")
             sys.exit(0)
-        print(f"REGENERATING: {reason}")
+        print(f"SYNCING: {reason}")
 
-    # Generate commands
-    config = load_config()
-    commands = config.get("commands", [])
-    generated = generate_all_commands()
+    # Sync commands
+    result = sync_commands()
 
     # Save state
     config_hash = get_config_hash()
-    save_state(config_hash)
+    commands_state = {}
+    for cmd_list, status in [
+        (result["created"], "created"),
+        (result["updated"], "updated"),
+        (result["skipped"], "skipped")
+    ]:
+        for cmd_name in cmd_list:
+            commands_state[cmd_name] = {"status": status}
+    save_state(config_hash, commands_state)
 
-    print(f"\nGenerated {len(generated)} command files to {COMMANDS_DIR}")
-    for cmd in sorted(generated)[:10]:
-        print(f"  - {cmd}")
-    if len(generated) > 10:
-        print(f"  ... and {len(generated) - 10} more")
+    # Output results
+    print(f"\nSync complete:")
+    print(f"  Created: {len(result['created'])}")
+    print(f"  Updated: {len(result['updated'])}")
+    print(f"  Skipped: {len(result['skipped'])}")
+    if result["errors"]:
+        print(f"  Errors: {len(result['errors'])}")
+        for cmd_name, err in result["errors"]:
+            print(f"    - {cmd_name}: {err}")
 
-    print("\nPlease restart Claude Code to use the new commands")
+    if result["created"]:
+        print("\nNew commands created:")
+        for cmd in sorted(result["created"])[:10]:
+            print(f"  - /{cmd}")
+        if len(result["created"]) > 10:
+            print(f"  ... and {len(result['created']) - 10} more")
+
+    if result["updated"]:
+        print("\nCommands updated:")
+        for cmd in sorted(result["updated"])[:10]:
+            print(f"  - /{cmd}")
+        if len(result["updated"]) > 10:
+            print(f"  ... and {len(result['updated']) - 10} more")
+
+    print("\nPlease restart Claude Code to use the updated commands")
 
 if __name__ == "__main__":
     import io
